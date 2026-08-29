@@ -1,20 +1,33 @@
-Biometric Security System (Fuzzy Vault Scheme)
+# Biometric Security System (Fuzzy Vault Scheme)
 
-A cryptographic authentication implementation in C++ using the Juels-Sudan Fuzzy Vault scheme to protect biometric template data with finite-field arithmetic and Reed-Solomon decoding routines.
+[![Live Demo](https://img.shields.io/badge/Demo-GitHub%20Pages-38bdf8?style=flat-square&logo=github)](https://chirantan17.github.io/biometric-fuzzy-vault/)
+[![Language](https://img.shields.io/badge/C%2B%2B-17-00599C?style=flat-square&logo=c%2B%2B)](https://isocpp.org/)
 
-•	System Architecture & Features
-    Finite-Field Arithmetic: Implements modular arithmetic and Fermat's Little Theorem for fast field inversion.
-    Polynomial Reconstruction: Lagrange interpolation combined with subset combination matching to decode secret keys from noisy biometric inputs.
-    Integrity Validation: Embedded CRC checksums eliminate false-positive polynomial reconstructions.
-    Chaff Point Injection: Provable zero-leakage security masking genuine biometric minutiae among cryptographic noise.
+An end-to-end cryptographic authentication engine implementing the **Juels-Sudan Fuzzy Vault** scheme in C++ to secure biometric template data using finite-field arithmetic and Reed-Solomon polynomial reconstruction.
 
-•	Benchmark Results
-    Enrolment Latency: ~99 µs (150 chaff points)
-    Match & Decoding Latency: ~27 µs
-    Imposter Rejection Latency: ~4 µs
-    False Accept Rate (FAR): 0.0%
+👉 **[Launch Interactive Web Sandbox](https://chirantan17.github.io/biometric-fuzzy-vault/)**
 
-•	Build and Run
-    PowerShell
-    g++ -std=c++17 -O3 fuzzy_vault.cpp -o fuzzy_vault.exe
-    .\fuzzy_vault.exe
+---
+
+## System Architecture
+
+```mermaid
+flowchart TD
+    subgraph Enrollment ["1. Vault Enrollment (Locking)"]
+        A[Biometric Minutiae Features] --> B[Generate Secret Poly p(x)]
+        B --> C[Evaluate Genuine Points (x, p(x))]
+        D[Chaff Point Generator] --> E[Noise Points (x_fake, y_fake)]
+        C & E --> F[Vault Set V = Genuine + Chaff]
+        F --> G[Randomized Shuffling]
+    end
+
+    subgraph Authentication ["2. Authentication (Unlocking)"]
+        H[Query Biometric Sample] --> I[Filter Candidate Set V_match]
+        I --> J{Overlap >= k+1?}
+        J -- No --> K[Reject: Imposter / Insufficient Overlap]
+        J -- Yes --> L[Combinatorial Lagrange Reconstruction]
+        L --> M{CRC Integrity Check Passed?}
+        M -- Yes --> N[Unlock: Secret Key Recovered]
+        M -- No --> O[Next Subset Combination]
+        O --> L
+    end
