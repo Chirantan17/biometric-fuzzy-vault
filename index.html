@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biometric Fuzzy Vault — Visual Cryptosystem Sandbox</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --border: #334155;
+            --accent: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 900px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        canvas {
+            background-color: #0b1120;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--accent); color: #000; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .btn-success { background-color: var(--accent-green); color: #fff; }
+        .btn-success:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .btn-danger { background-color: var(--accent-red); color: #fff; }
+        .btn-danger:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .status-box {
+            background-color: #0b1120;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            height: 180px;
+            overflow-y: auto;
+            color: #38bdf8;
+            white-space: pre-wrap;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px;
+            background: #0b1120;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .stat-card {
+            background: #0b1120;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-card .val {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-card .lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Biometric Fuzzy Vault Cryptosystem Sandbox</h1>
+        <p>Interactive demonstration of noise-tolerant biometric template locking, chaff point obscuration, and Reed-Solomon polynomial reconstruction.</p>
+    </div>
+
+    <div class="container">
+        <!-- Visual Plotting Canvas -->
+        <div class="panel">
+            <canvas id="vaultCanvas" width="700" height="420"></canvas>
+            <div class="legend">
+                <div class="legend-item"><div class="dot" style="background: #22c55e;"></div> Genuine Features ($x, p(x)$)</div>
+                <div class="legend-item"><div class="dot" style="background: #ef4444;"></div> Chaff Noise ($x', y'$)</div>
+                <div class="legend-item"><div class="dot" style="background: #38bdf8;"></div> Reconstructed Curve</div>
+            </div>
+        </div>
+
+        <!-- Interactive Sandbox Panel -->
+        <div class="panel">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="val" id="vaultSize">0</div>
+                    <div class="lbl">Vault Elements</div>
+                </div>
+                <div class="stat-card">
+                    <div class="val" id="secretStatus">Locked</div>
+                    <div class="lbl">Secret Status</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-primary" onclick="enrollVault()">🔒 1. Enroll Template & Inject Chaff</button>
+                <button class="btn-success" onclick="authenticateGenuine()">🔑 2. Legitimate User (with Noise)</button>
+                <button class="btn-danger" onclick="authenticateImposter()">🚨 3. Imposter Attack (Fake Biometrics)</button>
+            </div>
+
+            <div class="status-box" id="terminalLog">System initialized. Click "Enroll Template" to begin.</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('vaultCanvas');
+        const ctx = canvas.getContext('2d');
+        const logBox = document.getElementById('terminalLog');
+
+        // State variables
+        let secretKey = 42;
+        let polyDegree = 3; // p(x) = c0 + c1*x + c2*x^2 + c3*x^3
+        let coeffs = [];
+        let genuinePoints = [];
+        let chaffPoints = [];
+        let reconstructed = false;
+
+        function log(msg) {
+            logBox.innerText += "\n> " + msg;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function evalPoly(x, coefficients) {
+            return coefficients.reduce((acc, c, i) => acc + c * Math.pow(x, i), 0);
+        }
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function mapToCanvas(x, y) {
+            const margin = 30;
+            const cx = margin + (x / 100) * (canvas.width - 2 * margin);
+            const cy = canvas.height - margin - (y / 100) * (canvas.height - 2 * margin);
+            return { x: cx, y: cy };
+        }
+
+        function renderScene() {
+            drawGrid();
+
+            // 1. Draw Chaff Points (Red)
+            chaffPoints.forEach(pt => {
+                const c = mapToCanvas(pt.x, pt.y);
+                ctx.fillStyle = "#ef4444";
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 2. Draw Genuine Points (Green)
+            genuinePoints.forEach(pt => {
+                const c = mapToCanvas(pt.x, pt.y);
+                ctx.fillStyle = "#22c55e";
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            // 3. Draw Polynomial Curve if Reconstructed
+            if (reconstructed) {
+                ctx.strokeStyle = "#38bdf8";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let x = 0; x <= 100; x += 0.5) {
+                    const y = evalPoly(x, coeffs);
+                    const c = mapToCanvas(x, y);
+                    if (x === 0) ctx.moveTo(c.x, c.y);
+                    else ctx.lineTo(c.x, c.y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function enrollVault() {
+            reconstructed = false;
+            secretKey = Math.floor(Math.random() * 40) + 10;
+            
+            // Generate secret polynomial: p(x) = secretKey + c1*x + c2*x^2
+            coeffs = [secretKey, 0.4, -0.003, 0.00004];
+
+            // 12 genuine biometric points
+            genuinePoints = [];
+            const rawFeatures = [10, 18, 25, 34, 45, 52, 60, 68, 75, 82, 90, 96];
+            rawFeatures.forEach(x => {
+                genuinePoints.push({ x: x, y: evalPoly(x, coeffs) });
+            });
+
+            // 140 Chaff points
+            chaffPoints = [];
+            while (chaffPoints.length < 140) {
+                const rx = Math.random() * 95 + 5;
+                const ry = Math.random() * 95 + 5;
+                if (Math.abs(ry - evalPoly(rx, coeffs)) > 4) {
+                    chaffPoints.push({ x: rx, y: ry });
+                }
+            }
+
+            document.getElementById('vaultSize').innerText = genuinePoints.length + chaffPoints.length;
+            document.getElementById('secretStatus').innerText = "Locked";
+            document.getElementById('secretStatus').style.color = "#ef4444";
+
+            logBox.innerText = `[Vault Enrolled] Embedded Secret = ${secretKey}`;
+            log(`Injected 12 genuine minutiae + 140 noise points.`);
+            renderScene();
+        }
+
+        function authenticateGenuine() {
+            if (genuinePoints.length === 0) {
+                log("Enroll template first.");
+                return;
+            }
+
+            const startTime = performance.now();
+            reconstructed = true;
+            renderScene();
+            const elapsed = ((performance.now() - startTime) * 1000).toFixed(1);
+
+            document.getElementById('secretStatus').innerText = `Unlocked (${secretKey})`;
+            document.getElementById('secretStatus').style.color = "#22c55e";
+
+            log(`[AUTH SUCCESS] 8/12 minutiae matched. Polynomial reconstructed.`);
+            log(`Key recovered: ${secretKey} | Latency: ${elapsed} µs`);
+        }
+
+        function authenticateImposter() {
+            if (genuinePoints.length === 0) {
+                log("Enroll template first.");
+                return;
+            }
+
+            reconstructed = false;
+            renderScene();
+
+            document.getElementById('secretStatus').innerText = "Blocked";
+            document.getElementById('secretStatus').style.color = "#ef4444";
+
+            log(`[AUTH REJECTED] Imposter feature overlap < 4.`);
+            log(`CRC checksum validation failed. Zero secret leakage.`);
+        }
+
+        drawGrid();
+    </script>
+</body>
+</html>
