@@ -12,9 +12,11 @@
         extend: {
           colors: {
             obsidian: '#050507',
-            charcoal: '#0d0d11',
-            titanium: '#17171e',
-            'titanium-light': '#262631',
+            charcoal: '#0c0c0f',
+            titanium: '#16161d',
+            'titanium-light': '#22222b',
+            're-red': '#d91b24',
+            're-red-dark': '#9b111e',
             gold: {
               300: '#fde68a',
               400: '#fbbf24',
@@ -31,89 +33,102 @@
     }
   </script>
   <style>
-    /* Cinematic Splash Fade Out */
-    #splash-screen {
-      animation: splashFade 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      pointer-events: none;
+    /* Fullscreen Scroll-Snap Container */
+    .snap-container {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+      scroll-behavior: smooth;
     }
-    @keyframes splashFade {
-      0% { opacity: 1; visibility: visible; }
-      70% { opacity: 1; }
-      100% { opacity: 0; visibility: hidden; }
+    .snap-section {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      height: 100vh;
+      min-height: 100vh;
     }
-    .splash-text-glow {
-      text-shadow: 0 0 35px rgba(245, 158, 11, 0.45);
+
+    /* Cinematic Breathing Animation for Problem Statement */
+    @keyframes problemPulse {
+      0%, 100% {
+        opacity: 0.85;
+        transform: scale(1);
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.015);
+        text-shadow: 0 0 45px rgba(251, 191, 36, 0.25);
+      }
     }
-    .gold-glow {
-      box-shadow: 0 0 40px -10px rgba(245, 158, 11, 0.2);
+    .animate-problem-pulse {
+      animation: problemPulse 4s ease-in-out infinite;
     }
-    .gold-border:hover {
-      border-color: rgba(245, 158, 11, 0.5);
-      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.15);
+
+    /* Scanner Laser Beam Animation */
+    @keyframes laserSweep {
+      0% { top: 0%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
     }
-    .terminal-scroll::-webkit-scrollbar {
-      width: 4px;
+    .animate-laser {
+      animation: laserSweep 3s ease-in-out infinite;
     }
-    .terminal-scroll::-webkit-scrollbar-thumb {
-      background: #262631;
-      border-radius: 2px;
-    }
-    /* Concentric Mechanical Rings for Engine Showcase */
+
+    /* Concentric Mechanical Rings */
     .concentric-ring-1 {
-      border: 1px solid rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(217, 27, 36, 0.2);
       border-radius: 50%;
     }
     .concentric-ring-2 {
-      border: 1px dashed rgba(245, 158, 11, 0.1);
+      border: 1px dashed rgba(245, 158, 11, 0.25);
       border-radius: 50%;
-      animation: rotateRing 40s linear infinite;
+      animation: rotateRing 35s linear infinite;
     }
     @keyframes rotateRing {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    /* Custom Scrollbar */
+    .snap-container::-webkit-scrollbar {
+      width: 4px;
+    }
+    .snap-container::-webkit-scrollbar-track {
+      background: #050507;
+    }
+    .snap-container::-webkit-scrollbar-thumb {
+      background: #22222b;
+    }
   </style>
 </head>
-<body class="bg-obsidian text-zinc-200 antialiased selection:bg-gold-500 selection:text-obsidian overflow-x-hidden">
+<body class="bg-obsidian text-zinc-200 antialiased selection:bg-re-red selection:text-white overflow-hidden font-sans">
 
-  <!-- CINEMATIC ROYAL ENFIELD-STYLE SPLASH SCREEN -->
-  <div id="splash-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
-    <div class="text-center px-6">
-      <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gold-500/10 border border-gold-500/40 flex items-center justify-center text-gold-400">
-        <i class="fa-solid fa-fingerprint text-3xl"></i>
-      </div>
-      <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-[0.25em] text-white splash-text-glow font-sans">
-        FUZZY<span class="text-gold-400">VAULT</span>
-      </h1>
-      <p class="text-zinc-500 text-xs font-mono uppercase tracking-[0.4em] mt-3">
-        Zero-Leakage Biometric Cryptosystem
-      </p>
-    </div>
-  </div>
-
-  <!-- TOP STICKY NAVIGATION -->
-  <nav class="sticky top-0 z-50 bg-obsidian/90 backdrop-blur-md border-b border-titanium">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center space-x-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500/20 transition">
-          <i class="fa-solid fa-shield-halved text-lg"></i>
+  <!-- DYNAMIC TOP NAVIGATION (Fades in after scrolling past Slide 1) -->
+  <nav id="topNav" class="fixed top-0 left-0 w-full z-50 bg-obsidian/95 backdrop-blur-md border-b border-titanium opacity-0 pointer-events-none transition-opacity duration-500">
+    <div class="max-w-7xl mx-auto px-6 h-18 py-4 flex items-center justify-between">
+      <a href="#slide-1" class="flex items-center space-x-3 group">
+        <div class="w-8 h-8 rounded-lg bg-re-red/10 border border-re-red/30 flex items-center justify-center text-re-red">
+          <i class="fa-solid fa-fingerprint text-base"></i>
         </div>
         <div>
-          <span class="font-black text-sm tracking-wider uppercase text-white">Fuzzy<span class="text-gold-400">Vault</span></span>
-          <span class="block text-[9px] text-zinc-500 tracking-widest uppercase font-mono">Juels-Sudan C++17</span>
+          <span class="font-black text-xs tracking-wider uppercase text-white">Fuzzy<span class="text-re-red">Vault</span></span>
+          <span class="block text-[8px] text-zinc-500 tracking-widest uppercase font-mono">Juels-Sudan C++17</span>
         </div>
       </a>
 
-      <!-- Navigation Links -->
-      <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-zinc-400">
-        <a href="#breakdown" class="hover:text-gold-400 transition">Problem & Solution</a>
-        <a href="#simulator" class="hover:text-gold-400 transition">Live Simulator</a>
-        <a href="#engine" class="hover:text-gold-400 transition">Engine Specs</a>
-        <a href="#architect" class="hover:text-gold-400 transition">Lead Architect</a>
+      <!-- Quick Navigation Jump Points -->
+      <div class="hidden md:flex items-center space-x-8 text-[11px] font-bold uppercase tracking-widest text-zinc-400">
+        <a href="#slide-1" class="hover:text-re-red transition">Intro</a>
+        <a href="#slide-2" class="hover:text-gold-400 transition">Dilemma & Solution</a>
+        <a href="#slide-3" class="hover:text-gold-400 transition">Scanner Pipeline</a>
+        <a href="#slide-4" class="hover:text-gold-400 transition">Threat Simulator</a>
+        <a href="#slide-5" class="hover:text-gold-400 transition">Engine Specs</a>
+        <a href="#slide-6" class="hover:text-re-red transition">Architect & Report</a>
       </div>
 
-      <div class="flex items-center space-x-4">
-        <a href="https://github.com/Chirantan17/biometric-fuzzy-vault" target="_blank" class="bg-titanium hover:bg-titanium-light border border-zinc-800 text-zinc-200 text-xs px-4 py-2 rounded-xl font-mono uppercase tracking-wider transition flex items-center space-x-2">
+      <div class="flex items-center space-x-3">
+        <a href="https://github.com/Chirantan17/biometric-fuzzy-vault" target="_blank" class="bg-titanium hover:bg-titanium-light border border-zinc-800 text-zinc-300 text-xs px-3.5 py-1.5 rounded-lg font-mono uppercase tracking-wider transition flex items-center space-x-2">
           <i class="fa-brands fa-github text-sm"></i>
           <span>Source</span>
         </a>
@@ -121,326 +136,392 @@
     </div>
   </nav>
 
-  <!-- SECTION 1: HERO VIEWPORT (100vh) -->
-  <section class="min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center text-center px-6 relative py-16">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold-500/5 via-transparent to-transparent pointer-events-none"></div>
+  <!-- FULLSCREEN SCROLL-SNAP CONTAINER -->
+  <main class="snap-container" id="mainContainer">
 
-    <div class="inline-flex items-center space-x-2 bg-gold-500/10 border border-gold-500/30 px-4 py-1.5 rounded-full text-xs font-bold text-gold-400 tracking-widest uppercase mb-8">
-      <i class="fa-solid fa-microchip"></i>
-      <span>B.Tech Final-Year Capstone Project</span>
-    </div>
-
-    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-5xl mx-auto leading-[1.1] text-white uppercase">
-      You can reset a password. <br />
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-amber-300 to-amber-600">Never a stolen fingerprint.</span>
-    </h1>
-
-    <p class="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto mt-8 leading-relaxed">
-      A noise-tolerant cryptographic engine engineered in C++17. Obscures biometric minutiae coordinates within 140+ decoy chaff points over Galois Field $\mathbb{F}_{2^{31}-1}$ to achieve 0.000% False Accept Rate without persistent template storage.
-    </p>
-
-    <div class="mt-12 flex flex-wrap items-center justify-center gap-4">
-      <a href="#breakdown" class="bg-gold-500 hover:bg-gold-400 text-obsidian font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl transition shadow-lg shadow-gold-500/20 flex items-center space-x-2">
-        <span>Explore Architecture</span>
-        <i class="fa-solid fa-arrow-down text-xs"></i>
-      </a>
-      <a href="#simulator" class="bg-charcoal hover:bg-titanium border border-titanium text-zinc-300 font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl transition flex items-center space-x-2">
-        <i class="fa-solid fa-terminal text-gold-400"></i>
-        <span>Launch Sandbox</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- SECTION 2: 2-TAB HORIZONTAL BROWSER (PROBLEM VS SOLUTION) -->
-  <section id="breakdown" class="min-h-screen flex flex-col justify-center max-w-6xl mx-auto px-6 py-20 border-t border-titanium">
-    <div class="text-center max-w-3xl mx-auto mb-10">
-      <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-gold-400 mb-2">Architectural Blueprint</h2>
-      <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">The Dilemma & The Solution</h3>
-    </div>
-
-    <!-- Royal Enfield Pill Switcher Bar -->
-    <div class="flex justify-center mb-10">
-      <div class="bg-charcoal border border-titanium p-1.5 rounded-2xl flex space-x-2">
-        <button id="tabBtnProblem" class="px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 bg-gold-500 text-obsidian flex items-center space-x-2">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <span>Tab 1: The Core Crisis (Problem)</span>
-        </button>
-        <button id="tabBtnSolution" class="px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 text-zinc-400 hover:text-white flex items-center space-x-2">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span>Tab 2: The Fuzzy Vault (Solution)</span>
-        </button>
+    <!-- ========================================================================= -->
+    <!-- SLIDE 1: THE MONOLITH INTRO (Royal Enfield Super Meteor 650 Style)        -->
+    <!-- ========================================================================= -->
+    <section id="slide-1" class="snap-section flex flex-col justify-between items-center text-center px-6 py-14 relative bg-black">
+      <div class="w-full flex justify-between items-center text-zinc-600 font-mono text-[10px] tracking-[0.3em] uppercase">
+        <span>Systems Cryptography Lab</span>
+        <span>Version 1.0.4-Native</span>
       </div>
-    </div>
 
-    <!-- TAB 1 CONTENT: THE PROBLEM STATEMENT -->
-    <div id="tabContentProblem" class="transition-all duration-300">
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-charcoal border border-titanium rounded-3xl p-8 flex flex-col justify-between gold-border">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-gold-500/10 border border-gold-500/30 text-gold-400 flex items-center justify-center text-xl mb-6">
-              <i class="fa-solid fa-key"></i>
+      <!-- Centerpiece Problem Statement & Author Credentials -->
+      <div class="max-w-5xl mx-auto my-auto flex flex-col items-center">
+        <!-- Pulsing Statement -->
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight uppercase text-zinc-100 max-w-4xl animate-problem-pulse">
+          "WHY YOU CAN RESET A PASSWORD, <br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600">BUT NEVER A STOLEN FINGERPRINT."</span>
+        </h1>
+
+        <!-- Static Royal Enfield Crimson Red Author Line -->
+        <div class="mt-12 pt-10 border-t border-zinc-900 w-full max-w-md flex flex-col items-center">
+          <h2 class="text-2xl sm:text-3xl font-black tracking-[0.25em] uppercase text-re-red">
+            CHIRANTAN GHOSH
+          </h2>
+          <div class="text-zinc-400 font-mono text-xs uppercase tracking-[0.2em] mt-2 font-medium">
+            M.Tech in Computer Science • BITS Pilani
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Invitation Indicator -->
+      <div class="flex flex-col items-center space-y-2 text-zinc-600">
+        <span class="text-[9px] font-mono uppercase tracking-[0.3em]">Scroll To Enter</span>
+        <i class="fa-solid fa-chevron-down text-xs text-re-red animate-bounce"></i>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SLIDE 2: THE SPLIT BROWSER (Smooth Sliding Horizontal Tabs)               -->
+    <!-- ========================================================================= -->
+    <section id="slide-2" class="snap-section flex flex-col justify-center items-center px-6 py-12 relative bg-obsidian border-t border-titanium">
+      <div class="max-w-6xl w-full mx-auto flex flex-col h-full justify-center">
+        <div class="text-center mb-8">
+          <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Theoretical Architecture</h2>
+          <h3 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">The Dilemma & The Solution</h3>
+        </div>
+
+        <!-- Royal Enfield Styled Sliding Switcher -->
+        <div class="flex justify-center mb-8">
+          <div class="bg-charcoal border border-titanium p-1.5 rounded-2xl flex space-x-2">
+            <button id="tabBtnProblem" class="px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 bg-re-red text-white flex items-center space-x-2 shadow-lg shadow-re-red/20">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Tab 1: The Core Problem</span>
+            </button>
+            <button id="tabBtnSolution" class="px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 text-zinc-400 hover:text-white flex items-center space-x-2">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Tab 2: The Fuzzy Vault Solution</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Horizontal Slide Viewport Container -->
+        <div class="w-full overflow-hidden rounded-3xl border border-titanium bg-charcoal p-8">
+          <div id="tabSliderTrack" class="flex transition-transform duration-500 ease-out w-[200%]">
+            
+            <!-- PANEL 1: PROBLEM STATEMENT (100% of inner view) -->
+            <div class="w-1/2 pr-4 grid md:grid-cols-2 gap-6">
+              <div class="bg-obsidian border border-titanium p-6 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-400 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-key"></i>
+                  </div>
+                  <h4 class="text-base font-bold text-white uppercase mb-2">1. The Avalanche Effect Failure</h4>
+                  <p class="text-zinc-400 text-xs leading-relaxed">
+                    Cryptographic hash functions like SHA-256 require bit-exact inputs. A 1-pixel shift flips 50% of the output bits. Because biometric scans naturally vary due to pressure, angle, and sweat, standard hashing fails 100% of the time.
+                  </p>
+                </div>
+                <div class="bg-charcoal p-3 rounded-lg font-mono text-[11px] text-zinc-400 border border-titanium mt-4">
+                  <div><span class="text-zinc-500">Scan 1:</span> SHA256("Coord_45") ➔ <span class="text-gold-400">c8a2ef...</span></div>
+                  <div><span class="text-zinc-500">Scan 2:</span> SHA256("Coord_46") ➔ <span class="text-re-red font-bold">14b901... (Mismatch)</span></div>
+                </div>
+              </div>
+
+              <div class="bg-obsidian border border-titanium p-6 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <div class="w-10 h-10 rounded-xl bg-re-red/10 border border-re-red/30 text-re-red flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-skull-crossbones"></i>
+                  </div>
+                  <h4 class="text-base font-bold text-white uppercase mb-2">2. Non-Revocability Hazard</h4>
+                  <p class="text-zinc-400 text-xs leading-relaxed">
+                    Naive systems store raw minutiae templates in server databases. When that database is breached, the user's biological template is permanently stolen. You can change a password, but you cannot replace a biological fingerprint.
+                  </p>
+                </div>
+                <div class="bg-re-red/10 border border-re-red/30 p-3 rounded-lg text-[11px] text-zinc-300 flex items-center space-x-3 mt-4">
+                  <i class="fa-solid fa-biohazard text-xl text-re-red"></i>
+                  <span>Zero-Tolerance Threat: Biological identity cannot be re-issued upon server leakage.</span>
+                </div>
+              </div>
             </div>
-            <h4 class="text-xl font-black text-white uppercase tracking-wide mb-3">1. The Avalanche Effect Failure</h4>
-            <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
-              Standard cryptographic hashes (SHA-256) require 100% exact bit matching. Changing a single character flips 50% of hash bits. Because physical fingerprint scans naturally fluctuate on every touch due to pressure, angle, and moisture, standard password hashing is mathematically unusable for biometrics.
-            </p>
-          </div>
-          <div class="bg-obsidian border border-titanium rounded-xl p-4 font-mono text-xs text-zinc-400 space-y-2">
-            <div class="text-zinc-500"># Standard SHA-256 Behavior</div>
-            <div><span class="text-zinc-500">Scan 1:</span> SHA256("Scan_45.2_12.1") ➔ <span class="text-gold-400 font-bold">a665a45920...</span></div>
-            <div><span class="text-zinc-500">Scan 2:</span> SHA256("Scan_45.4_12.0") ➔ <span class="text-rose-400 font-bold">3f79a90baa... (Failed)</span></div>
-          </div>
-        </div>
 
-        <div class="bg-charcoal border border-titanium rounded-3xl p-8 flex flex-col justify-between gold-border">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center text-xl mb-6">
-              <i class="fa-solid fa-skull-crossbones"></i>
+            <!-- PANEL 2: SOLUTION PIPELINE (100% of inner view) -->
+            <div class="w-1/2 pl-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-obsidian border border-titanium p-5 rounded-2xl">
+                <div class="text-gold-400 font-mono text-[10px] font-bold uppercase mb-2">Step 01</div>
+                <h5 class="text-sm font-bold text-white uppercase mb-1">Secret Curve</h5>
+                <p class="text-zinc-400 text-[11px] leading-relaxed">Embeds secret key into polynomial $p(x) \pmod{2^{31}-1}$.</p>
+              </div>
+
+              <div class="bg-obsidian border border-titanium p-5 rounded-2xl">
+                <div class="text-gold-400 font-mono text-[10px] font-bold uppercase mb-2">Step 02</div>
+                <h5 class="text-sm font-bold text-white uppercase mb-1">True Pins</h5>
+                <p class="text-zinc-400 text-[11px] leading-relaxed">Evaluates 16 genuine minutiae coordinates on curve: $(x_i, p(x_i))$.</p>
+              </div>
+
+              <div class="bg-obsidian border border-titanium p-5 rounded-2xl">
+                <div class="text-gold-400 font-mono text-[10px] font-bold uppercase mb-2">Step 03</div>
+                <h5 class="text-sm font-bold text-white uppercase mb-1">Chaff Cloak</h5>
+                <p class="text-zinc-400 text-[11px] leading-relaxed">Scatters 140+ decoy coordinates $(x'_j, y'_j)$ to obscure genuine points.</p>
+              </div>
+
+              <div class="bg-obsidian border border-titanium p-5 rounded-2xl">
+                <div class="text-gold-400 font-mono text-[10px] font-bold uppercase mb-2">Step 04</div>
+                <h5 class="text-sm font-bold text-white uppercase mb-1">Lagrange & CRC</h5>
+                <p class="text-zinc-400 text-[11px] leading-relaxed">Reconstructs polynomial via $\ge 4$ matches; CRC enforces 0.0% FAR.</p>
+              </div>
             </div>
-            <h4 class="text-xl font-black text-white uppercase tracking-wide mb-3">2. Non-Revocability Hazard</h4>
-            <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
-              To bypass hash mismatches, naive systems store raw minutiae coordinate templates in database files. When a database is breached, the user's biological template is compromised permanently—unlike alphanumeric passwords, a human cannot be issued a replacement fingerprint.
-            </p>
+
           </div>
-          <div class="bg-rose-950/20 border border-rose-900/40 rounded-xl p-4 text-xs text-rose-300 flex items-center space-x-3">
-            <i class="fa-solid fa-biohazard text-2xl text-rose-400"></i>
-            <div>
-              <div class="font-bold uppercase tracking-wider text-[11px]">Identity Burn Threat</div>
-              <div class="text-rose-400/80 text-[11px]">Biometric templates are non-revocable. Storing raw coordinates creates irrecoverable identity theft.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SLIDE 3: PROCEDURAL SENSOR-TO-CIPHER SCANNER ANIMATION                   -->
+    <!-- ========================================================================= -->
+    <section id="slide-3" class="snap-section flex flex-col justify-center items-center px-6 py-12 relative bg-obsidian border-t border-titanium">
+      <div class="max-w-5xl w-full mx-auto text-center flex flex-col h-full justify-center">
+        <div class="mb-8">
+          <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Physical-to-Digital Bridge</h2>
+          <h3 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">Procedural Biometric Scanner</h3>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center bg-charcoal border border-titanium p-8 rounded-3xl">
+          <!-- Live Scanner Viewport -->
+          <div class="relative w-64 h-80 mx-auto bg-obsidian border-2 border-titanium rounded-2xl overflow-hidden flex items-center justify-center shadow-inner">
+            <i class="fa-solid fa-fingerprint text-9xl text-zinc-800"></i>
+            
+            <!-- Laser Scanning Beam -->
+            <div class="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-re-red to-transparent animate-laser"></div>
+            
+            <!-- Minutiae Nodes Generated on Scan -->
+            <div class="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping top-24 left-20"></div>
+            <div class="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping top-44 left-36"></div>
+            <div class="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping top-36 left-48"></div>
+            <div class="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping top-56 left-28"></div>
+
+            <div class="absolute bottom-2 left-0 right-0 text-center font-mono text-[9px] uppercase tracking-widest text-zinc-500">
+              Minutiae Extractor Active
+            </div>
+          </div>
+
+          <!-- Scanner Extraction Stages -->
+          <div class="text-left space-y-4 font-mono text-xs">
+            <div class="p-4 rounded-xl bg-obsidian border border-titanium">
+              <div class="text-zinc-500 text-[10px] uppercase">Phase 01: Physical Minutiae Acquisition</div>
+              <div class="text-zinc-200 mt-1 font-bold">Spatial Vector: 16 Ridge Bifurcations Extracted</div>
+            </div>
+            <div class="p-4 rounded-xl bg-obsidian border border-titanium">
+              <div class="text-zinc-500 text-[10px] uppercase">Phase 02: Galois Field Mapping</div>
+              <div class="text-gold-400 mt-1 font-bold">Discrete Integer Evaluation Modulo $2^{31}-1$</div>
+            </div>
+            <div class="p-4 rounded-xl bg-obsidian border border-titanium">
+              <div class="text-zinc-500 text-[10px] uppercase">Phase 03: Chaff Point Camouflage</div>
+              <div class="text-re-red mt-1 font-bold">140 Decoy Points Injected into Coordinate Space</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- TAB 2 CONTENT: THE FUZZY VAULT SOLUTION -->
-    <div id="tabContentSolution" class="hidden transition-all duration-300">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-charcoal border border-titanium p-6 rounded-2xl relative gold-border">
-          <div class="text-gold-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">Phase 01</div>
-          <h4 class="font-black text-base text-white mb-2 uppercase">Secret Binding</h4>
-          <p class="text-zinc-400 text-xs leading-relaxed">
-            The engine embeds the secret key $S$ into polynomial $p(x) = c_0 + c_1 x + c_2 x^2 + c_3 x^3 \pmod{2^{31}-1}$.
-          </p>
+    <!-- ========================================================================= -->
+    <!-- SLIDE 4: THE THREAT SIMULATOR CONSOLE                                    -->
+    <!-- ========================================================================= -->
+    <section id="slide-4" class="snap-section flex flex-col justify-center items-center px-6 py-12 relative bg-obsidian border-t border-titanium">
+      <div class="max-w-6xl w-full mx-auto flex flex-col h-full justify-center">
+        <div class="text-center mb-6">
+          <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-1">Live Cryptosystem Sandbox</h2>
+          <h3 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">Interactive Threat Simulator</h3>
         </div>
 
-        <div class="bg-charcoal border border-titanium p-6 rounded-2xl relative gold-border">
-          <div class="text-gold-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">Phase 02</div>
-          <h4 class="font-black text-base text-white mb-2 uppercase">Minutiae Locking</h4>
-          <p class="text-zinc-400 text-xs leading-relaxed">
-            12–16 genuine coordinates extracted from the scan are evaluated directly on the curve: $(x_i, p(x_i))$.
-          </p>
-        </div>
-
-        <div class="bg-charcoal border border-titanium p-6 rounded-2xl relative gold-border">
-          <div class="text-gold-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">Phase 03</div>
-          <h4 class="font-black text-base text-white mb-2 uppercase">Chaff Cloaking</h4>
-          <p class="text-zinc-400 text-xs leading-relaxed">
-            140+ decoy noise points $(x'_j, y'_j)$ with $y'_j \neq p(x'_j)$ are uniformly injected to camouflage the real points.
-          </p>
-        </div>
-
-        <div class="bg-charcoal border border-titanium p-6 rounded-2xl relative gold-border">
-          <div class="text-gold-400 font-mono text-xs font-bold uppercase tracking-widest mb-3">Phase 04</div>
-          <h4 class="font-black text-base text-white mb-2 uppercase">Lagrange & CRC</h4>
-          <p class="text-zinc-400 text-xs leading-relaxed">
-            A genuine scan matching $\ge 4$ points reconstructs $p(x)$. An embedded 16-bit CRC checksum guarantees 0.0% False Accepts.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: INTERACTIVE THREAT SIMULATOR (100vh) -->
-  <section id="simulator" class="min-h-screen flex flex-col justify-center max-w-7xl mx-auto px-6 py-20 border-t border-titanium">
-    <div class="text-center max-w-3xl mx-auto mb-10">
-      <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-gold-400 mb-2">Live Verification</h2>
-      <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">Interactive Cryptosystem Sandbox</h3>
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-8 bg-charcoal border border-titanium p-6 sm:p-8 rounded-3xl gold-glow">
-      <!-- 2D Canvas Viewport -->
-      <div class="lg:col-span-2 flex flex-col">
-        <div class="relative bg-obsidian rounded-2xl border border-titanium overflow-hidden flex-1 flex items-center justify-center p-2 min-h-[380px]">
-          <canvas id="vaultCanvas" width="650" height="380" class="w-full h-full max-h-[380px] rounded-xl"></canvas>
-        </div>
-        <div class="flex flex-wrap items-center justify-center gap-6 mt-4 text-xs font-mono text-zinc-400">
-          <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span><span>Genuine $(x_i, p(x_i))$</span></div>
-          <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span><span>Chaff Decoy Noise</span></div>
-          <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-gold-400 inline-block"></span><span>Reconstructed Curve</span></div>
-        </div>
-      </div>
-
-      <!-- Controls & Terminal -->
-      <div class="flex flex-col justify-between space-y-4">
-        <!-- Status Gauges -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-obsidian p-3.5 rounded-2xl border border-titanium text-center">
-            <div class="text-[10px] text-zinc-500 font-mono uppercase tracking-wider">Vault Point Set</div>
-            <div id="pointCount" class="text-2xl font-black font-mono text-gold-400 mt-0.5">0</div>
-          </div>
-          <div class="bg-obsidian p-3.5 rounded-2xl border border-titanium text-center">
-            <div class="text-[10px] text-zinc-500 font-mono uppercase tracking-wider">Lock State</div>
-            <div id="vaultStatus" class="text-2xl font-black font-mono text-zinc-600 mt-0.5">Unset</div>
-          </div>
-        </div>
-
-        <!-- Action Scenario Buttons -->
-        <div class="space-y-2.5">
-          <button id="btnEnroll" class="w-full bg-titanium hover:bg-titanium-light text-gold-400 border border-gold-500/40 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-lock"></i>
-            <span>1. Enroll & Inject Chaff Noise</span>
-          </button>
-          <button id="btnAuth" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-user-check"></i>
-            <span>2. Legitimate Scan (With Noise)</span>
-          </button>
-          <button id="btnImposter" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-user-slash"></i>
-            <span>3. Imposter Attack (Fake Biometric)</span>
-          </button>
-          <button id="btnBreach" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-database"></i>
-            <span>4. Database Dump (Attacker View)</span>
-          </button>
-        </div>
-
-        <!-- Terminal Logger -->
-        <div class="bg-obsidian p-3.5 rounded-xl border border-titanium font-mono text-[11px] leading-relaxed text-zinc-300 h-32 overflow-y-auto terminal-scroll" id="terminalLog">
-          <div class="text-zinc-600">> System ready. Click Enroll to initialize vault.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4: ENGINE SPECIFICATIONS & RINGS (100vh) -->
-  <section id="engine" class="min-h-screen flex flex-col justify-center max-w-6xl mx-auto px-6 py-20 border-t border-titanium relative">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-gold-400 mb-2">Systems Architecture</h2>
-      <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">Galois Field Engine & Specs</h3>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Engine Radial Diagnostic -->
-      <div class="relative flex items-center justify-center min-h-[320px]">
-        <div class="w-72 h-72 concentric-ring-1 absolute"></div>
-        <div class="w-88 h-88 concentric-ring-2 absolute"></div>
-        <div class="text-center z-10 bg-charcoal/90 border border-titanium p-8 rounded-3xl backdrop-blur-md">
-          <div class="text-gold-400 text-4xl mb-2 font-mono font-bold">$\mathbb{F}_{2^{31}-1}$</div>
-          <div class="text-xs font-mono text-zinc-400 uppercase tracking-widest">Mersenne Prime Modulus</div>
-          <div class="text-[11px] text-zinc-500 mt-2 font-mono">$P = 2147483647$</div>
-        </div>
-      </div>
-
-      <!-- Latency & Complexity Matrix -->
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div class="bg-charcoal border border-titanium p-5 rounded-2xl text-center gold-border">
-          <div class="text-3xl font-black text-gold-400 font-mono">99 µs</div>
-          <div class="text-xs font-bold text-zinc-300 mt-1 uppercase tracking-wider">Enrollment Latency</div>
-          <div class="text-[10px] text-zinc-500 mt-1">16 genuine + 150 chaff points generated.</div>
-        </div>
-
-        <div class="bg-charcoal border border-titanium p-5 rounded-2xl text-center gold-border">
-          <div class="text-3xl font-black text-emerald-400 font-mono">27 µs</div>
-          <div class="text-xs font-bold text-zinc-300 mt-1 uppercase tracking-wider">Decoding Latency</div>
-          <div class="text-[10px] text-zinc-500 mt-1">Lagrange interpolation with CRC check.</div>
-        </div>
-
-        <div class="bg-charcoal border border-titanium p-5 rounded-2xl text-center gold-border">
-          <div class="text-3xl font-black text-rose-400 font-mono">4 µs</div>
-          <div class="text-xs font-bold text-zinc-300 mt-1 uppercase tracking-wider">Imposter Rejection</div>
-          <div class="text-[10px] text-zinc-500 mt-1">Instant candidate filter cutoff $(m < 4)$.</div>
-        </div>
-
-        <div class="bg-charcoal border border-titanium p-5 rounded-2xl text-center gold-border">
-          <div class="text-3xl font-black text-amber-500 font-mono">0.000%</div>
-          <div class="text-xs font-bold text-zinc-300 mt-1 uppercase tracking-wider">False Accept Rate</div>
-          <div class="text-[10px] text-zinc-500 mt-1">Guaranteed via 16-bit CRC checksum.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5: LEAD ARCHITECT (100vh) -->
-  <section id="architect" class="min-h-screen flex flex-col justify-center max-w-4xl mx-auto px-6 py-20 border-t border-titanium">
-    <div class="text-center max-w-3xl mx-auto mb-12">
-      <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-gold-400 mb-2">Systems Engineering</h2>
-      <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">The Lead Architect</h3>
-    </div>
-
-    <div class="bg-charcoal border border-titanium rounded-3xl p-8 sm:p-12 relative overflow-hidden gold-glow">
-      <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
-        <!-- Photo Frame Placeholder -->
-        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-titanium border-2 border-gold-500/40 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
-          <div class="text-center p-4 text-zinc-500">
-            <i class="fa-solid fa-user-astronaut text-5xl text-gold-400/60 mb-2"></i>
-            <div class="text-[9px] uppercase font-mono tracking-widest text-zinc-400">Chirantan Ghosh</div>
-          </div>
-        </div>
-
-        <!-- Bio & Ownership -->
-        <div class="flex-1 text-center md:text-left">
-          <div class="inline-block bg-zinc-800 border border-zinc-700 text-gold-400 text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full mb-3">
-            Systems & Cryptography Lead
-          </div>
-          <h4 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-            Chirantan Ghosh
-          </h4>
-          <p class="text-zinc-400 text-xs sm:text-sm mt-3 leading-relaxed">
-            Designed and engineered the C++17 cryptographic backend engine implementing the Juels-Sudan Fuzzy Vault scheme. Authored the Galois Field $\mathbb{F}_{2^{31}-1}$ arithmetic pipeline, Fermat's Little Theorem modular inversion, combinatorial Lagrange interpolation solver, and the CRC-16 checksum integrity filter.
-          </p>
-
-          <div class="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-            <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">C++17 Architecture</span>
-            <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Galois Field Arithmetic</span>
-            <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Lagrange Solver</span>
+        <div class="grid lg:grid-cols-3 gap-6 bg-charcoal border border-titanium p-6 rounded-3xl">
+          <!-- 2D Canvas -->
+          <div class="lg:col-span-2 flex flex-col">
+            <div class="relative bg-obsidian rounded-2xl border border-titanium overflow-hidden flex-1 flex items-center justify-center p-2 min-h-[320px]">
+              <canvas id="vaultCanvas" width="600" height="320" class="w-full h-full max-h-[320px] rounded-lg"></canvas>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-6 mt-3 text-[11px] font-mono text-zinc-400">
+              <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span><span>Genuine Point</span></div>
+              <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span><span>Decoy Chaff</span></div>
+              <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-gold-400 inline-block"></span><span>Secret Curve</span></div>
+            </div>
           </div>
 
-          <div class="mt-8 pt-6 border-t border-titanium flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span class="text-xs text-zinc-500 font-mono">B.Tech Final Year Capstone</span>
-            <a href="https://chirantan17.github.io" target="_blank" class="w-full sm:w-auto bg-gold-500 hover:bg-gold-400 text-obsidian text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-gold-500/20">
-              <span>Know More About Me</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </a>
+          <!-- Simulator Controls & Terminal -->
+          <div class="flex flex-col justify-between space-y-3">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="bg-obsidian p-3 rounded-xl border border-titanium text-center">
+                <div class="text-[9px] text-zinc-500 font-mono uppercase">Vault Set</div>
+                <div id="pointCount" class="text-xl font-black font-mono text-gold-400">0</div>
+              </div>
+              <div class="bg-obsidian p-3 rounded-xl border border-titanium text-center">
+                <div class="text-[9px] text-zinc-500 font-mono uppercase">Lock State</div>
+                <div id="vaultStatus" class="text-xl font-black font-mono text-zinc-600">Unset</div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-2">
+              <button id="btnEnroll" class="w-full bg-titanium hover:bg-titanium-light text-gold-400 border border-gold-500/30 font-bold py-2 px-3 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-lock"></i>
+                <span>1. Enroll & Inject Chaff</span>
+              </button>
+              <button id="btnAuth" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-user-check"></i>
+                <span>2. Owner Scan (Noise-Tolerant)</span>
+              </button>
+              <button id="btnImposter" class="w-full bg-re-red hover:bg-re-red-dark text-white font-bold py-2 px-3 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-user-slash"></i>
+                <span>3. Physical Thief (Foreign Finger)</span>
+              </button>
+              <button id="btnBreach" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-2 px-3 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-database"></i>
+                <span>4. Database Dump (Attacker View)</span>
+              </button>
+            </div>
+
+            <!-- Telemetry Console -->
+            <div class="bg-obsidian p-3 rounded-xl border border-titanium font-mono text-[10px] leading-relaxed text-zinc-300 h-28 overflow-y-auto" id="terminalLog">
+              <div class="text-zinc-600">> System initialized. Click Enroll to lock secret key.</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer class="max-w-6xl mx-auto px-6 py-12 border-t border-titanium text-xs text-zinc-600 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="flex items-center space-x-2">
-      <span class="font-bold uppercase tracking-wider text-zinc-400">Biometric Fuzzy Vault</span>
-      <span>•</span>
-      <span>Juels-Sudan C++17 Implementation</span>
-    </div>
-    <div class="font-mono">Open Source under MIT License</div>
-  </footer>
+    <!-- ========================================================================= -->
+    <!-- SLIDE 5: MECHANICAL TELEMETRY & SPECS                                    -->
+    <!-- ========================================================================= -->
+    <section id="slide-5" class="snap-section flex flex-col justify-center items-center px-6 py-12 relative bg-obsidian border-t border-titanium">
+      <div class="max-w-6xl w-full mx-auto flex flex-col h-full justify-center">
+        <div class="text-center mb-10">
+          <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Systems Telemetry</h2>
+          <h3 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">Finite-Field Performance Specs</h3>
+        </div>
 
-  <!-- JAVASCRIPT: TAB SWITCHER & CANVAS SIMULATOR -->
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <!-- Concentric Ring Visualizer -->
+          <div class="relative flex items-center justify-center min-h-[260px]">
+            <div class="w-60 h-60 concentric-ring-1 absolute"></div>
+            <div class="w-72 h-72 concentric-ring-2 absolute"></div>
+            <div class="text-center z-10 bg-charcoal/90 border border-titanium p-6 rounded-3xl backdrop-blur-md">
+              <div class="text-re-red text-3xl font-mono font-black">$\mathbb{F}_{2^{31}-1}$</div>
+              <div class="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mt-1">Galois Field Modulus</div>
+              <div class="text-[10px] text-zinc-500 font-mono mt-1">$P = 2147483647$</div>
+            </div>
+          </div>
+
+          <!-- Benchmark Gauges -->
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="bg-charcoal border border-titanium p-4 rounded-2xl text-center">
+              <div class="text-2xl font-black text-gold-400 font-mono">99 µs</div>
+              <div class="text-xs font-bold text-zinc-300 mt-1 uppercase">Enrollment Latency</div>
+              <div class="text-[10px] text-zinc-500 mt-1">16 genuine + 150 chaff points.</div>
+            </div>
+
+            <div class="bg-charcoal border border-titanium p-4 rounded-2xl text-center">
+              <div class="text-2xl font-black text-emerald-400 font-mono">27 µs</div>
+              <div class="text-xs font-bold text-zinc-300 mt-1 uppercase">Decoding Latency</div>
+              <div class="text-[10px] text-zinc-500 mt-1">Lagrange + CRC-16 check.</div>
+            </div>
+
+            <div class="bg-charcoal border border-titanium p-4 rounded-2xl text-center">
+              <div class="text-2xl font-black text-re-red font-mono">4 µs</div>
+              <div class="text-xs font-bold text-zinc-300 mt-1 uppercase">Imposter Rejection</div>
+              <div class="text-[10px] text-zinc-500 mt-1">Instant candidate cutoff $(m < 4)$.</div>
+            </div>
+
+            <div class="bg-charcoal border border-titanium p-4 rounded-2xl text-center">
+              <div class="text-2xl font-black text-amber-500 font-mono">0.000%</div>
+              <div class="text-xs font-bold text-zinc-300 mt-1 uppercase">False Accept Rate</div>
+              <div class="text-[10px] text-zinc-500 mt-1">Guaranteed via 16-bit CRC tag.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SLIDE 6: LEAD ARCHITECT & TECHNICAL REPORT                               -->
+    <!-- ========================================================================= -->
+    <section id="slide-6" class="snap-section flex flex-col justify-center items-center px-6 py-12 relative bg-obsidian border-t border-titanium">
+      <div class="max-w-4xl w-full mx-auto flex flex-col h-full justify-center">
+        <div class="text-center mb-8">
+          <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Systems Lead</h2>
+          <h3 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">Architect Dossier & Report</h3>
+        </div>
+
+        <div class="bg-charcoal border border-titanium rounded-3xl p-8 relative overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+            <!-- Profile Photo Frame -->
+            <div class="w-32 h-32 rounded-2xl bg-titanium border-2 border-re-red/40 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
+              <img src="assets/profile.jpg" alt="Chirantan Ghosh" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Chirantan+Ghosh&background=0c0c0f&color=d91b24&size=256';" class="w-full h-full object-cover" />
+            </div>
+
+            <!-- Creator Information -->
+            <div class="flex-1 text-center md:text-left">
+              <div class="inline-block bg-zinc-900 border border-zinc-800 text-re-red text-[10px] font-mono uppercase tracking-widest px-3 py-0.5 rounded-full mb-2">
+                Systems & Cryptography Lead
+              </div>
+              <h4 class="text-2xl font-black text-white uppercase tracking-tight">
+                Chirantan Ghosh
+              </h4>
+              <div class="text-xs font-mono text-zinc-400 mt-1">M.Tech in Computer Science • BITS Pilani</div>
+              <p class="text-zinc-400 text-xs mt-3 leading-relaxed">
+                Designed and authored the C++17 cryptographic engine implementing the Juels-Sudan Fuzzy Vault scheme. Implemented the Galois Field $\mathbb{F}_{2^{31}-1}$ arithmetic pipeline, Fermat modular exponentiation, combinatorial Lagrange polynomial solver, and CRC-16 verification.
+              </p>
+
+              <!-- Action Links (Portfolio & Report Download) -->
+              <div class="mt-6 pt-6 border-t border-titanium flex flex-wrap items-center gap-3 justify-center md:justify-start">
+                <a href="https://chirantan17.github.io" target="_blank" class="bg-re-red hover:bg-re-red-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl transition flex items-center space-x-2">
+                  <span>Know More About Me</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+
+                <a href="report.pdf" download="Biometric_Fuzzy_Vault_Technical_Report.pdf" class="bg-titanium hover:bg-titanium-light border border-zinc-700 text-zinc-200 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl transition flex items-center space-x-2">
+                  <i class="fa-solid fa-file-pdf text-re-red"></i>
+                  <span>Download Project Report (PDF)</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Notice -->
+        <div class="text-center font-mono text-[10px] text-zinc-600 uppercase tracking-widest mt-8">
+          Biometric Fuzzy Vault • C++17 Core Engine • Open Source Research
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT: SLIDING TABS, NAVBAR FADE, AND 2D ENGINE -->
   <script>
-    // TAB SWITCHER LOGIC
+    // 1. Dynamic Navbar Fade On Scroll Past Slide 1
+    const mainContainer = document.getElementById("mainContainer");
+    const topNav = document.getElementById("topNav");
+    mainContainer.addEventListener("scroll", () => {
+      if (mainContainer.scrollTop > window.innerHeight * 0.4) {
+        topNav.classList.remove("opacity-0", "pointer-events-none");
+        topNav.classList.add("opacity-100", "pointer-events-auto");
+      } else {
+        topNav.classList.add("opacity-0", "pointer-events-none");
+        topNav.classList.remove("opacity-100", "pointer-events-auto");
+      }
+    });
+
+    // 2. Horizontal Sliding Tabs Logic
     const tabBtnProblem = document.getElementById("tabBtnProblem");
     const tabBtnSolution = document.getElementById("tabBtnSolution");
-    const tabContentProblem = document.getElementById("tabContentProblem");
-    const tabContentSolution = document.getElementById("tabContentSolution");
+    const tabSliderTrack = document.getElementById("tabSliderTrack");
 
     tabBtnProblem.addEventListener("click", () => {
-      tabBtnProblem.className = "px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 bg-gold-500 text-obsidian flex items-center space-x-2";
-      tabBtnSolution.className = "px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 text-zinc-400 hover:text-white flex items-center space-x-2";
-      tabContentProblem.classList.remove("hidden");
-      tabContentSolution.classList.add("hidden");
+      tabSliderTrack.style.transform = "translateX(0%)";
+      tabBtnProblem.className = "px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 bg-re-red text-white flex items-center space-x-2 shadow-lg shadow-re-red/20";
+      tabBtnSolution.className = "px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 text-zinc-400 hover:text-white flex items-center space-x-2";
     });
 
     tabBtnSolution.addEventListener("click", () => {
-      tabBtnSolution.className = "px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 bg-gold-500 text-obsidian flex items-center space-x-2";
-      tabBtnProblem.className = "px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-200 text-zinc-400 hover:text-white flex items-center space-x-2";
-      tabContentSolution.classList.remove("hidden");
-      tabContentProblem.classList.add("hidden");
+      tabSliderTrack.style.transform = "translateX(-50%)";
+      tabBtnSolution.className = "px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 bg-re-red text-white flex items-center space-x-2 shadow-lg shadow-re-red/20";
+      tabBtnProblem.className = "px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition duration-300 text-zinc-400 hover:text-white flex items-center space-x-2";
     });
 
-    // 2D CANVAS CRYPTOSYSTEM ENGINE
+    // 3. 2D Interactive Cryptosystem Simulator Canvas
     const canvas = document.getElementById("vaultCanvas");
     const ctx = canvas.getContext("2d");
     const terminal = document.getElementById("terminalLog");
@@ -468,7 +549,7 @@
 
     function drawGrid() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "#121218";
+      ctx.strokeStyle = "#16161d";
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += 40) {
         ctx.beginPath();
@@ -514,7 +595,7 @@
         ctx.lineWidth = 3;
         ctx.beginPath();
         for (let x = 30; x < canvas.width - 30; x += 5) {
-          let y = canvas.height - 40 - evalPoly(x) * 1.6;
+          let y = canvas.height - 30 - evalPoly(x) * 1.5;
           if (x === 30) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
@@ -531,7 +612,7 @@
 
       for (let i = 1; i <= 12; i++) {
         let x = 45 * i + (Math.random() * 8 - 4);
-        let y = canvas.height - 40 - evalPoly(x) * 1.6;
+        let y = canvas.height - 30 - evalPoly(x) * 1.5;
         genuinePoints.push({ x, y });
       }
 
@@ -544,14 +625,14 @@
       isEnrolled = true;
       pointCountElem.innerText = genuinePoints.length + chaffPoints.length;
       vaultStatusElem.innerText = "LOCKED";
-      vaultStatusElem.className = "text-2xl font-black font-mono text-gold-400 mt-0.5";
+      vaultStatusElem.className = "text-xl font-black font-mono text-gold-400";
 
       render();
       log("Vault Enrolled: Secret Key = 26 embedded into polynomial p(x).", "text-gold-400");
       log("Injected 12 genuine minutiae + 140 chaff noise points (Total: 152).", "text-zinc-300");
     });
 
-    // BUTTON 2: LEGITIMATE USER
+    // BUTTON 2: LEGITIMATE OWNER
     document.getElementById("btnAuth").addEventListener("click", () => {
       if (!isEnrolled) return log("Please enroll the vault first!", "text-amber-400");
       hackerView = false;
@@ -559,7 +640,7 @@
       render();
 
       vaultStatusElem.innerText = "UNLOCKED";
-      vaultStatusElem.className = "text-2xl font-black font-mono text-emerald-400 mt-0.5";
+      vaultStatusElem.className = "text-xl font-black font-mono text-emerald-400";
       log("[AUTH SUCCESS] 9/12 minutiae matched within tolerance delta.", "text-emerald-400");
       log("Lagrange reconstruction solved over F(2^31-1). CRC verified.", "text-emerald-300");
       log("Recovered Secret Key: 26 | Latency: 27.2 µs", "text-gold-400");
@@ -573,9 +654,9 @@
       render();
 
       vaultStatusElem.innerText = "BLOCKED";
-      vaultStatusElem.className = "text-2xl font-black font-mono text-rose-500 mt-0.5";
-      log("[AUTH REJECTED] Imposter fingerprint minutiae overlap < 4.", "text-rose-400");
-      log("CRC checksum validation failed. Zero secret leakage | Latency: 4.1 µs", "text-rose-300");
+      vaultStatusElem.className = "text-xl font-black font-mono text-re-red";
+      log("[AUTH REJECTED] Imposter fingerprint minutiae overlap < 4.", "text-re-red");
+      log("CRC checksum validation failed. Zero secret leakage | Latency: 4.1 µs", "text-zinc-400");
     });
 
     // BUTTON 4: DATABASE BREACH
@@ -586,7 +667,7 @@
       render();
 
       vaultStatusElem.innerText = "ENCRYPTED";
-      vaultStatusElem.className = "text-2xl font-black font-mono text-zinc-400 mt-0.5";
+      vaultStatusElem.className = "text-xl font-black font-mono text-zinc-400";
       log("[DB BREACH SIMULATION] Attacker dumps backend coordinates.", "text-amber-300");
       log("All 152 points are mathematically indistinguishable.", "text-zinc-300");
       log("Combinatorial search space: C(152, 4) = 21,354,490 candidate curves.", "text-gold-400");
