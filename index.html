@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   
-  <!-- KaTeX Math Engine for Automatic LaTeX Formatting -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
@@ -502,16 +501,31 @@
           <span>Foundational Research (Prior Art)</span>
         </div>
         <div class="space-y-4 text-xs leading-relaxed text-zinc-300">
-          <div class="p-4 rounded-xl bg-obsidian border border-titanium">
-            <div class="font-bold text-white">[1] Juels, A., & Sudan, M. (2002)</div>
+          <a href="https://doi.org/10.1109/TIT.2006.874390" target="_blank" rel="noopener noreferrer" 
+             class="block p-4 rounded-xl bg-obsidian border border-titanium hover:border-gold-500/60 hover:bg-titanium/50 transition group">
+            <div class="flex items-center justify-between">
+              <div class="font-bold text-white group-hover:text-gold-400 transition">[1] Juels, A., &amp; Sudan, M. (2002)</div>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-zinc-500 group-hover:text-gold-400 transition"></i>
+            </div>
             <div class="text-zinc-400 mt-1">"A Fuzzy Vault Scheme." <em>IEEE Transactions on Information Theory</em>, 52(9).</div>
-            <div class="text-zinc-500 text-[10px] mt-2">Introduced the theoretical formulation of polynomial locking with random chaff points.</div>
-          </div>
-          <div class="p-4 rounded-xl bg-obsidian border border-titanium">
-            <div class="font-bold text-white">[2] Nandakumar, K., Jain, A. K., & Pankanti, S. (2007)</div>
+            <div class="text-zinc-500 text-[10px] mt-2 flex items-center justify-between">
+              <span>Introduced polynomial locking with random chaff points.</span>
+              <span class="text-gold-400 font-mono underline ml-2 whitespace-nowrap">View Paper (IEEE DOI) &nearr;</span>
+            </div>
+          </a>
+
+          <a href="https://doi.org/10.1109/TIFS.2007.908165" target="_blank" rel="noopener noreferrer" 
+             class="block p-4 rounded-xl bg-obsidian border border-titanium hover:border-gold-500/60 hover:bg-titanium/50 transition group">
+            <div class="flex items-center justify-between">
+              <div class="font-bold text-white group-hover:text-gold-400 transition">[2] Nandakumar, K., Jain, A. K., &amp; Pankanti, S. (2007)</div>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-zinc-500 group-hover:text-gold-400 transition"></i>
+            </div>
             <div class="text-zinc-400 mt-1">"Fingerprint-Based Fuzzy Vault." <em>IEEE Transactions on Information Forensics and Security</em>, 2(4).</div>
-            <div class="text-zinc-500 text-[10px] mt-2">Demonstrated minutiae coordinate binding and spatial alignment challenges.</div>
-          </div>
+            <div class="text-zinc-500 text-[10px] mt-2 flex items-center justify-between">
+              <span>Minutiae coordinate binding and spatial alignment challenges.</span>
+              <span class="text-gold-400 font-mono underline ml-2 whitespace-nowrap">View Paper (IEEE DOI) &nearr;</span>
+            </div>
+          </a>
         </div>
       </div>
 
@@ -571,7 +585,9 @@
     <div class="bg-charcoal border border-titanium rounded-3xl p-8 sm:p-12 relative overflow-hidden">
       <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
         <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-titanium border-2 border-re-red/40 overflow-hidden flex-shrink-0 flex items-center justify-center relative shadow-2xl">
-          <img src="assets/profile.png" alt="Chirantan Ghosh" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Chirantan+Ghosh&background=0b0b0f&color=d91b24&size=256';" class="w-full h-full object-cover" />
+          <img src="assets/profile.png" alt="Chirantan Ghosh" 
+               onerror="if (!this.dataset.retry) { this.dataset.retry = '1'; this.src = 'assets/profile.PNG'; } else { this.onerror = null; this.src = 'https://ui-avatars.com/api/?name=Chirantan+Ghosh&background=0b0b0f&color=d91b24&size=256'; }" 
+               class="w-full h-full object-cover" />
         </div>
 
         <div class="flex-1 text-center md:text-left">
