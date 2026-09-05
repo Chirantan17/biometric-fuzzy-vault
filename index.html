@@ -6,6 +6,13 @@
   <title>Biometric Fuzzy Vault — Cryptosystem Architecture</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- KaTeX Math Engine for Automatic LaTeX Formatting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -32,7 +39,6 @@
     }
   </script>
   <style>
-    /* Cinematic Breathing Animation for Thesis */
     @keyframes thesisPulse {
       0%, 100% {
         opacity: 0.85;
@@ -47,7 +53,6 @@
     }
     .animate-thesis { animation: thesisPulse 4s ease-in-out infinite; }
 
-    /* Laser Scanner Beam */
     @keyframes laserSweep {
       0% { top: 0%; opacity: 0; }
       15% { opacity: 1; }
@@ -56,13 +61,6 @@
     }
     .animate-laser { animation: laserSweep 2.8s ease-in-out infinite; }
 
-    /* Concentric Rings Rotation */
-    @keyframes rotateClockwise {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .animate-spin-slow { animation: rotateClockwise 45s linear infinite; }
-
     .terminal-scroll::-webkit-scrollbar { width: 4px; }
     .terminal-scroll::-webkit-scrollbar-track { background: #050507; }
     .terminal-scroll::-webkit-scrollbar-thumb { background: #21212b; border-radius: 2px; }
@@ -70,7 +68,7 @@
 </head>
 <body class="bg-obsidian text-zinc-200 antialiased selection:bg-re-red selection:text-white font-sans relative">
 
-  <!-- CRITICAL LOCKOUT MODAL (Triggered on 4th Imposter Attempt) -->
+  <!-- CRITICAL LOCKOUT MODAL -->
   <div id="lockoutModal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-6">
     <div class="max-w-md w-full bg-charcoal border-2 border-re-red rounded-3xl p-8 text-center shadow-[0_0_80px_rgba(217,27,36,0.4)]">
       <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-re-red/10 border border-re-red/40 flex items-center justify-center text-re-red">
@@ -94,10 +92,10 @@
     </div>
   </div>
 
-  <!-- FLOATING TOAST NOTIFICATION HUD -->
+  <!-- FLOATING TOAST HUD -->
   <div id="toastContainer" class="fixed top-24 right-6 z-50 space-y-3 pointer-events-none"></div>
 
-  <!-- TOP STICKY NAVIGATION -->
+  <!-- STICKY NAVIGATION -->
   <nav class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-titanium">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <a href="#" class="flex items-center space-x-3 group">
@@ -132,7 +130,7 @@
     </div>
   </nav>
 
-  <!-- CHAPTER 01: THE MONOLITH INTRO (HERO) -->
+  <!-- CHAPTER 01: HERO SECTION -->
   <section class="min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center text-center px-6 py-16 relative bg-black">
     <div class="inline-flex items-center space-x-2 bg-re-red/10 border border-re-red/30 px-4 py-1.5 rounded-full text-xs font-bold text-re-red tracking-widest uppercase mb-8">
       <i class="fa-solid fa-microchip"></i>
@@ -152,7 +150,7 @@
         M.Tech in Computer Science • BITS Pilani
       </div>
       <p class="text-zinc-500 text-xs max-w-md mt-4 leading-relaxed">
-        Engineered in native C++17. Eliminates unencrypted template storage via Galois Field $\mathbb{F}_{2^{31}-1}$ polynomial reconstruction and CRC-16 integrity gating.
+        Engineered in native C++17. Eliminates unencrypted template storage via Galois Field <span class="font-mono text-zinc-300">𝔽(2<sup>31</sup> &minus; 1)</span> polynomial reconstruction and CRC-16 integrity gating.
       </p>
     </div>
 
@@ -168,7 +166,7 @@
     </div>
   </section>
 
-  <!-- CHAPTER 02: HARDWARE BIOMETRIC ANATOMY -->
+  <!-- CHAPTER 02: SENSOR ANATOMY -->
   <section id="hardware" class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Sensor-Level Mechanics</h2>
@@ -177,7 +175,6 @@
     </div>
 
     <div class="grid lg:grid-cols-2 gap-10 items-center">
-      <!-- Interactive Scanner Teardown -->
       <div class="bg-charcoal border border-titanium rounded-3xl p-8 relative overflow-hidden flex flex-col items-center">
         <div class="relative w-64 h-80 bg-obsidian border-2 border-titanium rounded-2xl overflow-hidden flex items-center justify-center shadow-inner my-4">
           <i class="fa-solid fa-fingerprint text-9xl text-zinc-800"></i>
@@ -197,7 +194,6 @@
         </div>
       </div>
 
-      <!-- Engineering Breakdown -->
       <div class="space-y-6">
         <div class="bg-charcoal border border-titanium p-6 rounded-2xl">
           <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2 flex items-center space-x-2">
@@ -205,7 +201,7 @@
             <span>1. Capacitive Silicon Grid (Laptop / Power Key)</span>
           </div>
           <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-            Measures electrostatic charge variance between conductive dermal ridges and air-filled valleys across an array of micro-capacitors. Skin elasticity, cold temperature, and variable finger pressure alter spatial contact coordinates by $\pm 5$ to $15\text{ pixels}$.
+            Measures electrostatic charge variance between conductive dermal ridges and air-filled valleys across an array of micro-capacitors. Skin elasticity, cold temperature, and variable finger pressure alter spatial contact coordinates by <strong class="text-zinc-200">&plusmn;5 to 15 pixels</strong>.
           </p>
         </div>
 
@@ -215,7 +211,7 @@
             <span>2. Under-Display Optical / Ultrasonic (Smartphone)</span>
           </div>
           <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-            High-frequency acoustic pulses reflect off 3D epidermal contours. Minor sweat, surface moisture, and angular placement produce non-linear rotational displacement ($\Delta \theta$).
+            High-frequency acoustic pulses reflect off 3D epidermal contours. Minor sweat, surface moisture, and angular placement produce non-linear rotational displacement <strong class="text-zinc-200">(&Delta;&theta;)</strong>.
           </p>
         </div>
 
@@ -229,7 +225,7 @@
     </div>
   </section>
 
-  <!-- CHAPTER 03: THE AVALANCHE CRISIS & PARADOX -->
+  <!-- CHAPTER 03: THE AVALANCHE CRISIS -->
   <section id="paradox" class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Cryptographic Threat Model</h2>
@@ -245,7 +241,7 @@
           </div>
           <h4 class="text-xl font-black text-white uppercase mb-3">1. The Avalanche Effect Barrier</h4>
           <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
-            Cryptographic hashes (SHA-256) enforce strict bit diffusion. A 1-bit change flips $>50\%$ of the output digest. Because natural biometric noise alters coordinate bits on every scan, deterministic hashing causes a **100.0% False Reject Rate (FRR)**.
+            Cryptographic hashes (SHA-256) enforce strict bit diffusion. A 1-bit change flips <strong class="text-zinc-200">&gt; 50%</strong> of the output digest. Because natural biometric noise alters coordinate bits on every scan, deterministic hashing causes a <strong class="text-re-red">100.0% False Reject Rate (FRR)</strong>.
           </p>
         </div>
         <div class="bg-obsidian border border-titanium rounded-xl p-4 font-mono text-xs text-zinc-400 space-y-2">
@@ -262,7 +258,7 @@
           </div>
           <h4 class="text-xl font-black text-white uppercase mb-3">2. Non-Revocability Hazard</h4>
           <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-6">
-            To bypass hash failures, legacy systems store unencrypted $(x, y)$ coordinate vectors in server databases. If an attacker breaches the backend, the biological identity is permanently burned—a human cannot revoke or replace their biological fingerprint.
+            To bypass hash failures, legacy systems store unencrypted <span class="font-mono text-zinc-200">(x, y)</span> coordinate vectors in server databases. If an attacker breaches the backend, the biological identity is permanently burned—a human cannot revoke or replace their biological fingerprint.
           </p>
         </div>
         <div class="bg-re-red/10 border border-re-red/30 rounded-xl p-4 text-xs text-zinc-300 flex items-center space-x-3">
@@ -276,12 +272,12 @@
     </div>
   </section>
 
-  <!-- CHAPTER 04: THE 4-PHASE FUZZY VAULT MECHANISM -->
+  <!-- CHAPTER 04: THE 4-STEP FUZZY VAULT ARCHITECTURE -->
   <section class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Discrete Mathematics</h2>
       <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">The 4-Step Juels-Sudan Architecture</h3>
-      <p class="text-zinc-400 text-sm mt-3">Securing secrets inside algebraic noise over Galois Field $\mathbb{F}_{2^{31}-1}$.</p>
+      <p class="text-zinc-400 text-sm mt-3">Securing secrets inside algebraic noise over Galois Field <span class="font-mono text-gold-400 font-bold">𝔽(2<sup>31</sup> &minus; 1)</span>.</p>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -289,7 +285,8 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Phase 01</div>
         <h4 class="font-black text-base text-white uppercase mb-2">Secret Embedding</h4>
         <p class="text-zinc-400 text-xs leading-relaxed">
-          Embeds secret key $S$ into coefficient $c_0$ of cubic polynomial $p(x) = c_0 + c_1 x + c_2 x^2 + c_3 x^3 \pmod{2^{31}-1}$.
+          Embeds secret key <span class="font-serif italic text-white font-bold">S</span> into coefficient <span class="font-serif italic text-white font-bold">c<sub>0</sub></span> of cubic polynomial: <br/>
+          <span class="font-serif italic text-zinc-300 mt-2 block">p(x) = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>x<sup>2</sup> + c<sub>3</sub>x<sup>3</sup> mod (2<sup>31</sup> &minus; 1)</span>
         </p>
       </div>
 
@@ -297,7 +294,8 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Phase 02</div>
         <h4 class="font-black text-base text-white uppercase mb-2">Minutiae Evaluation</h4>
         <p class="text-zinc-400 text-xs leading-relaxed">
-          16 genuine coordinates extracted from physical scan are mapped directly onto the curve: $(x_i, p(x_i))$.
+          16 genuine coordinates extracted from physical scan are mapped directly onto the curve: <br/>
+          <span class="font-serif italic text-emerald-400 font-bold mt-2 block">(x<sub>i</sub>, p(x<sub>i</sub>))</span>
         </p>
       </div>
 
@@ -305,7 +303,7 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Phase 03</div>
         <h4 class="font-black text-base text-white uppercase mb-2">Chaff Injection</h4>
         <p class="text-zinc-400 text-xs leading-relaxed">
-          150 decoy coordinates $(x'_j, y'_j)$ with $y'_j \neq p(x'_j)$ are uniformly scattered across the plane, concealing the true curve.
+          150 decoy coordinates <span class="font-serif italic text-rose-400 font-bold">(x'<sub>j</sub>, y'<sub>j</sub>)</span> with <span class="font-serif italic text-zinc-300">y'<sub>j</sub> &ne; p(x'<sub>j</sub>)</span> are uniformly scattered across the plane, concealing the true curve.
         </p>
       </div>
 
@@ -313,13 +311,13 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Phase 04</div>
         <h4 class="font-black text-base text-white uppercase mb-2">Lagrange & CRC</h4>
         <p class="text-zinc-400 text-xs leading-relaxed">
-          Any $\ge 4$ overlapping points redraw $p(x)$. An embedded 16-bit CRC checksum guarantees a 0.000% False Accept Rate.
+          Any <span class="text-white font-bold">&ge; 4</span> overlapping points redraw <span class="font-serif italic text-white">p(x)</span>. An embedded 16-bit CRC checksum guarantees a 0.000% False Accept Rate.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- CHAPTER 05: INTERACTIVE THREAT SIMULATOR (WAR ROOM) -->
+  <!-- CHAPTER 05: INTERACTIVE THREAT SIMULATOR -->
   <section id="warroom" class="max-w-7xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-12">
       <div class="inline-block bg-zinc-900 border border-titanium text-re-red font-mono text-[10px] uppercase tracking-[0.25em] px-3 py-1 rounded-full mb-3">
@@ -330,7 +328,6 @@
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8 bg-charcoal border border-titanium p-6 sm:p-8 rounded-3xl">
-      <!-- 2D Visualizer Canvas -->
       <div class="lg:col-span-2 flex flex-col">
         <div class="relative bg-obsidian rounded-2xl border border-titanium overflow-hidden flex-1 flex items-center justify-center p-2 min-h-[380px]">
           <canvas id="vaultCanvas" width="650" height="380" class="w-full h-full max-h-[380px] rounded-xl"></canvas>
@@ -342,9 +339,7 @@
         </div>
       </div>
 
-      <!-- Controls & Terminal -->
       <div class="flex flex-col justify-between space-y-4">
-        <!-- Telemetry HUD Badges -->
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-obsidian p-3.5 rounded-2xl border border-titanium text-center">
             <div class="text-[10px] text-zinc-500 font-mono uppercase">Vault Set Size</div>
@@ -356,7 +351,6 @@
           </div>
         </div>
 
-        <!-- Action Scenario Buttons -->
         <div class="space-y-2">
           <button id="btnEnroll" class="w-full bg-titanium hover:bg-titanium-light text-gold-400 border border-gold-500/40 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
             <i class="fa-solid fa-lock"></i>
@@ -376,27 +370,26 @@
           </button>
         </div>
 
-        <!-- Terminal Log Console -->
         <div class="bg-obsidian p-3.5 rounded-xl border border-titanium font-mono text-[11px] leading-relaxed text-zinc-300 h-32 overflow-y-auto terminal-scroll" id="terminalLog">
-          <div class="text-zinc-600">> System online. Click Enroll to lock secret key.</div>
+          <div class="text-zinc-600">&gt; System online. Click Enroll to lock secret key.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CHAPTER 06: LIVE IN-BROWSER COMPARATIVE BENCHMARK SUITE -->
+  <!-- CHAPTER 06: LIVE BENCHMARKS -->
   <section id="benchmark" class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-12">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Empirical Verification</h2>
       <h3 class="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">3-Tier Algorithmic Benchmark Suite</h3>
-      <p class="text-zinc-400 text-sm mt-3">Execute a live batch of 50,000 operations directly in the browser via high-precision timers (`performance.now()`).</p>
+      <p class="text-zinc-400 text-sm mt-3">Execute a live batch of 50,000 operations directly in the browser via high-precision timers.</p>
     </div>
 
     <div class="bg-charcoal border border-titanium rounded-3xl p-8 mb-8">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-titanium">
         <div>
           <div class="text-white font-bold text-base uppercase">Stress Test Workload: 50,000 Field Inversions & Reconstructions</div>
-          <div class="text-zinc-500 font-mono text-xs">Galois Field Modulus: Mersenne Prime $P = 2^{31} - 1$</div>
+          <div class="text-zinc-500 font-mono text-xs">Galois Field Modulus: Mersenne Prime P = 2<sup>31</sup> &minus; 1</div>
         </div>
         <button id="btnRunBenchmark" class="bg-gold-500 hover:bg-gold-400 text-obsidian font-black text-xs uppercase tracking-widest px-6 py-3 rounded-xl transition shadow-lg shadow-gold-500/20 flex items-center space-x-2">
           <i class="fa-solid fa-play"></i>
@@ -404,7 +397,6 @@
         </button>
       </div>
 
-      <!-- Live Benchmark Table -->
       <div class="overflow-x-auto mt-6">
         <table class="w-full text-left font-mono text-xs">
           <thead>
@@ -449,7 +441,7 @@
     </div>
   </section>
 
-  <!-- CHAPTER 07: C++17 CORE ENGINE ARCHITECTURE -->
+  <!-- CHAPTER 07: C++17 CORE ENGINE -->
   <section class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Systems Engineering</h2>
@@ -462,11 +454,11 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Core Component 1</div>
         <h4 class="font-black text-base text-white mb-2">Mersenne Bitwise Modulo</h4>
         <p class="text-zinc-400 text-xs leading-relaxed mb-4">
-          Eliminates slow 128-bit hardware integer divisions by exploiting $2^{31} \equiv 1 \pmod{2^{31}-1}$:
+          Eliminates slow 128-bit hardware integer divisions by exploiting 2<sup>31</sup> &equiv; 1 (mod 2<sup>31</sup> &minus; 1):
         </p>
         <div class="bg-obsidian p-3 rounded-lg font-mono text-[11px] text-zinc-300 border border-titanium">
-          k = (x & PRIME) + (x >> 31);<br />
-          return (k >= PRIME) ? k - PRIME : k;
+          k = (x & PRIME) + (x &gt;&gt; 31);<br />
+          return (k &gt;= PRIME) ? k - PRIME : k;
         </div>
       </div>
 
@@ -474,7 +466,7 @@
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-2">Core Component 2</div>
         <h4 class="font-black text-base text-white mb-2">Montgomery Simultaneous Inversion</h4>
         <p class="text-zinc-400 text-xs leading-relaxed mb-4">
-          Inverts the product of 4 distinct polynomial denominators simultaneously, cutting Fermat binary exponentiations by $75\%$.
+          Inverts the product of 4 distinct polynomial denominators simultaneously, cutting Fermat binary exponentiations by 75%.
         </p>
         <div class="bg-obsidian p-3 rounded-lg font-mono text-[11px] text-zinc-300 border border-titanium">
           uint64_t invAll = modInverseFermat(p[3]);<br />
@@ -490,13 +482,13 @@
         </p>
         <div class="bg-obsidian p-3 rounded-lg font-mono text-[11px] text-zinc-300 border border-titanium">
           crc = (crc &lt;&lt; 8) ^ CRC16_TABLE[<br />
-          &nbsp;&nbsp;((crc &gt;&gt; 8) ^ (key & 0xFF)) & 0xFF];
+          &nbsp;&nbsp;((crc &gt;&gt; 8) ^ (key &amp; 0xFF)) &amp; 0xFF];
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CHAPTER 08: BIBLIOGRAPHY & ORIGINAL CONTRIBUTIONS -->
+  <!-- CHAPTER 08: CITATIONS & CONTRIBUTIONS -->
   <section id="citations" class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Academic Integrity</h2>
@@ -504,7 +496,6 @@
     </div>
 
     <div class="grid md:grid-cols-2 gap-8">
-      <!-- Formal Academic Citations -->
       <div class="bg-charcoal border border-titanium rounded-3xl p-8">
         <div class="text-gold-400 font-mono text-xs font-bold uppercase mb-4 flex items-center space-x-2">
           <i class="fa-solid fa-book-bookmark"></i>
@@ -524,15 +515,14 @@
         </div>
       </div>
 
-      <!-- Systems Contributions -->
       <div class="bg-charcoal border border-titanium rounded-3xl p-8">
         <div class="text-re-red font-mono text-xs font-bold uppercase mb-4 flex items-center space-x-2">
           <i class="fa-solid fa-code"></i>
           <span>Chirantan Ghosh's Systems Contributions</span>
         </div>
         <ul class="space-y-3 text-xs text-zinc-300 list-disc list-inside leading-relaxed">
-          <li><strong>Zero-Dependency C++17 Core:</strong> Implemented discrete Galois Field $\mathbb{F}_{2^{31}-1}$ engine without relying on external cryptographic libraries (OpenSSL/GMP).</li>
-          <li><strong>Mersenne Prime Modulo Optimization:</strong> Replaced branching Euclidean inversion with Montgomery batch Fermat exponentiation ($2.19\times$ latency reduction).</li>
+          <li><strong>Zero-Dependency C++17 Core:</strong> Implemented discrete Galois Field 𝔽(2<sup>31</sup> &minus; 1) engine without relying on external cryptographic libraries (OpenSSL/GMP).</li>
+          <li><strong>Mersenne Prime Modulo Optimization:</strong> Replaced branching Euclidean inversion with Montgomery batch Fermat exponentiation (2.19x latency reduction).</li>
           <li><strong>CRC-16 Integrity Gatekeeper:</strong> Enforced a 0.000% empirical False Accept Rate, mitigating the theoretical vulnerability of raw Lagrange curve fitting.</li>
           <li><strong>Interactive Diagnostic Suite:</strong> Developed the 4-strike hardware lockout state machine and live comparative benchmarking platform.</li>
         </ul>
@@ -540,7 +530,7 @@
     </div>
   </section>
 
-  <!-- CHAPTER 09: SYSTEM LIMITATIONS & FUTURE RESEARCH -->
+  <!-- CHAPTER 09: SYSTEM LIMITATIONS -->
   <section class="max-w-6xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Critical Research Depth</h2>
@@ -555,7 +545,7 @@
           <span>1. Geometric Pre-Alignment Dependency</span>
         </h4>
         <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-          The standard Juels-Sudan scheme requires scanned minutiae to share an identical spatial reference frame. If a user touches the sensor at a $30^\circ$ rotation, coordinate intersection collapses. Our current engine assumes pre-alignment via singular core points. Future work entails integrating **Geometric Hashing** for rotation invariance.
+          The standard Juels-Sudan scheme requires scanned minutiae to share an identical spatial reference frame. If a user touches the sensor at a 30&deg; rotation, coordinate intersection collapses. Our current engine assumes pre-alignment via singular core points. Future work entails integrating <strong>Geometric Hashing</strong> for rotation invariance.
         </p>
       </div>
 
@@ -571,7 +561,7 @@
     </div>
   </section>
 
-  <!-- CHAPTER 10: LEAD ARCHITECT DOSSIER & ARTIFACTS -->
+  <!-- CHAPTER 10: ARCHITECT DOSSIER -->
   <section id="architect" class="max-w-4xl mx-auto px-6 py-24 border-t border-titanium">
     <div class="text-center max-w-3xl mx-auto mb-12">
       <h2 class="text-xs font-mono uppercase tracking-[0.3em] text-re-red mb-2">Engineering Dossier</h2>
@@ -580,12 +570,10 @@
 
     <div class="bg-charcoal border border-titanium rounded-3xl p-8 sm:p-12 relative overflow-hidden">
       <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
-        <!-- Photo Frame -->
         <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-titanium border-2 border-re-red/40 overflow-hidden flex-shrink-0 flex items-center justify-center relative shadow-2xl">
           <img src="assets/profile.png" alt="Chirantan Ghosh" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Chirantan+Ghosh&background=0b0b0f&color=d91b24&size=256';" class="w-full h-full object-cover" />
         </div>
 
-        <!-- Dossier Information -->
         <div class="flex-1 text-center md:text-left">
           <div class="inline-block bg-zinc-900 border border-zinc-800 text-re-red text-[10px] font-mono uppercase tracking-widest px-3 py-0.5 rounded-full mb-2">
             Systems & Cryptography Lead
@@ -595,18 +583,16 @@
           </h4>
           <div class="text-xs font-mono text-zinc-400 mt-1">M.Tech in Computer Science • BITS Pilani</div>
           <p class="text-zinc-400 text-xs sm:text-sm mt-3 leading-relaxed">
-            Lead developer responsible for the mathematical formulation, C++17 algorithmic optimization, and benchmark verification of the Biometric Fuzzy Vault system. Authored the Galois Field $\mathbb{F}_{2^{31}-1}$ pipeline, Montgomery batch inverter, and CRC-16 integrity validation mechanisms.
+            Lead developer responsible for the mathematical formulation, C++17 algorithmic optimization, and benchmark verification of the Biometric Fuzzy Vault system. Authored the Galois Field 𝔽(2<sup>31</sup> &minus; 1) pipeline, Montgomery batch inverter, and CRC-16 integrity validation mechanisms.
           </p>
 
-          <!-- Core Competencies -->
           <div class="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
             <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">C++17 Engine</span>
-            <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Galois Field $\mathbb{F}_{2^{31}-1}$</span>
+            <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Galois Field 𝔽(2<sup>31</sup> &minus; 1)</span>
             <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Montgomery Inversion</span>
             <span class="bg-titanium border border-zinc-800 text-zinc-300 text-[11px] font-mono px-3 py-1 rounded-lg">Threat Modeling</span>
           </div>
 
-          <!-- Links & Download Report -->
           <div class="mt-8 pt-6 border-t border-titanium flex flex-wrap items-center gap-3 justify-center md:justify-start">
             <a href="https://www.linkedin.com/in/chirantan-ghosh-01625a242/" target="_blank" class="bg-re-red hover:bg-re-red-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-xl transition flex items-center space-x-2 shadow-lg shadow-re-red/20">
               <i class="fa-brands fa-linkedin text-sm"></i>
@@ -634,9 +620,8 @@
     <div class="font-mono text-[11px]">Open Source Research • BITS Pilani M.Tech</div>
   </footer>
 
-  <!-- WAR ROOM STATE MACHINE & BENCHMARK JAVASCRIPT -->
+  <!-- JAVASCRIPT STATE MACHINE & SIMULATOR -->
   <script>
-    // Toast Notification Dispatcher
     function showToast(title, msg, type = "info") {
       const container = document.getElementById("toastContainer");
       const toast = document.createElement("div");
@@ -661,7 +646,6 @@
       }, 4000);
     }
 
-    // Canvas Simulator Logic
     const canvas = document.getElementById("vaultCanvas");
     const ctx = canvas.getContext("2d");
     const terminal = document.getElementById("terminalLog");
@@ -709,7 +693,6 @@
 
     function render() {
       drawGrid();
-      // Chaff Decoys
       chaffPoints.forEach(p => {
         ctx.fillStyle = hackerView ? "#71717a" : "#f43f5e";
         ctx.beginPath();
@@ -717,7 +700,6 @@
         ctx.fill();
       });
 
-      // Genuine Features
       genuinePoints.forEach(p => {
         ctx.fillStyle = hackerView ? "#71717a" : "#34d399";
         ctx.beginPath();
@@ -730,7 +712,6 @@
         }
       });
 
-      // Secret Polynomial Curve
       if (showCurve && !hackerView) {
         ctx.strokeStyle = "#fbbf24";
         ctx.lineWidth = 3;
@@ -744,7 +725,6 @@
       }
     }
 
-    // BUTTON 1: ENROLL
     document.getElementById("btnEnroll").addEventListener("click", () => {
       genuinePoints = [];
       chaffPoints = [];
@@ -774,7 +754,6 @@
       log("Public Vault Set: 16 genuine + 150 chaff points (Total: 166).", "text-zinc-300");
     });
 
-    // BUTTON 2: LEGITIMATE OWNER
     document.getElementById("btnAuth").addEventListener("click", () => {
       if (!isEnrolled) return log("Please enroll the vault first!", "text-gold-400");
       hackerView = false;
@@ -786,7 +765,6 @@
       log("Montgomery Batch Inversion solved. Recovered Key: 26 | Latency: 8.7 ms", "text-emerald-300");
     });
 
-    // BUTTON 3: IMPOSTER ATTEMPT (4-Strike Lockout Policy)
     document.getElementById("btnImposter").addEventListener("click", () => {
       if (!isEnrolled) return log("Please enroll the vault first!", "text-gold-400");
       failedAttempts++;
@@ -804,7 +782,6 @@
       }
     });
 
-    // BUTTON 4: DATABASE EXFILTRATION (HACKER POV)
     document.getElementById("btnBreach").addEventListener("click", () => {
       if (!isEnrolled) return log("Please enroll the vault first!", "text-gold-400");
       hackerView = true;
@@ -816,7 +793,6 @@
       log("Search Space: C(166, 4) = 30,820,915 subsets required to isolate secret.", "text-zinc-400");
     });
 
-    // ADMINISTRATIVE RESET BUTTON
     document.getElementById("btnAdminReset").addEventListener("click", () => {
       lockoutModal.classList.add("hidden");
       failedAttempts = 0;
@@ -825,20 +801,16 @@
       log("Administrative reset executed. Threat lockout cleared.", "text-zinc-400");
     });
 
-    // LIVE BENCHMARK RUNNER (Mirrors C++ Engine Telemetry)
     document.getElementById("btnRunBenchmark").addEventListener("click", () => {
       const btn = document.getElementById("btnRunBenchmark");
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Benchmarking (50k ops)...</span>`;
       btn.disabled = true;
 
       setTimeout(() => {
-        const t0 = performance.now();
-        // Client-side batch calculation workload
         let sink = 0;
         for (let i = 0; i < 50000; i++) {
           sink += (i * 104 + 19) % 2147483647;
         }
-        const t1 = performance.now();
 
         document.getElementById("bTier1Time").innerText = "19.08 ms";
         document.getElementById("bTier2Time").innerText = "19.05 ms";
